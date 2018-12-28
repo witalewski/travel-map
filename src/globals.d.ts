@@ -7,19 +7,20 @@ interface MapglMap {
   addLayer: any;
 }
 
-interface Location {
+interface Destination {
   name: string;
   photos?: string[];
+  coords?: Coords;
 }
 
 interface AppState {
-  displayMarkers: boolean;
-  locationCoords: any[];
-  currentSlide: number;
-  displayPhoto: boolean;
+  destinations: Destination[];
+  currentDestinationIndex: number;
+  currentDestination: Destination;
   currentPhotoIndex: number;
-  currentPhotoSource: string;
-  travelMap: Location[];
+  currentPhoto: string;
+  displayPhoto: boolean;
+  displayMarkers: boolean;
 }
 
 interface Coords {

@@ -1,6 +1,5 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import { func, string, number, arrayOf, bool, shape } from "prop-types";
 
 import {
   renderMap,
@@ -10,24 +9,19 @@ import {
   addRoute,
   addSolidSegments
 } from "./map";
-import {
-  nextSlide,
-  nextPhoto,
-  setLocationCoords,
-  showMarkers
-} from "./state/actions";
+import { next, setdestinationsCoordinates, showMarkers } from "./state/actions";
 
 export class App extends React.Component<{
   displayMarkers: boolean;
-  locationCoords: Coords[];
-  currentSlide: number;
+  destinationsCoordinates: Coords[];
+  currentDestinationIndex: number;
   displayPhoto: boolean;
   currentPhotoIndex: number;
-  currentPhotoSource: string;
-  travelMap: Location[];
-  nextSlide: () => void;
-  nextPhoto: () => void;
-  setLocationCoords: (locationCoords: Location[]) => void;
+  currentPhoto: string;
+  destinations: Destination[];
+  currentDestination: Destination;
+  next: () => void;
+  setdestinationsCoordinates: (destinationsCoordinates: Destination[]) => void;
   showMarkers: () => void;
 }> {
   map: MapglMap;
@@ -41,29 +35,28 @@ export class App extends React.Component<{
     this.unregisterEventListeners();
   }
 
-  addLocationMarker = location => addMarker(location, this.map);
+  addDestinationMarker = location => addMarker(location, this.map);
 
-  getLocationCoords = markers =>
+  getdestinationsCoordinates = markers =>
     markers.map((marker: MapglMarker) => marker._lngLat);
 
   setupMap() {
+    const { destinations, showMarkers } = this.props;
     this.map = renderMap("map");
-    Promise.all(this.props.travelMap.map(this.addLocationMarker)).then(
-      markers => {
-        const locationCoords = this.getLocationCoords(markers);
-        this.props.setLocationCoords(locationCoords);
-        this.zoomToBounds(locationCoords);
-        setTimeout(() => {
-          this.props.showMarkers();
-          addRoute(this.map, locationCoords);
-        }, 1500);
-      }
-    );
+    Promise.all(destinations.map(this.addDestinationMarker)).then(markers => {
+      const destinationsCoordinates = this.getdestinationsCoordinates(markers);
+      this.props.setdestinationsCoordinates(destinationsCoordinates);
+      this.zoomToBounds(destinationsCoordinates);
+      setTimeout(() => {
+        showMarkers();
+        addRoute(this.map, destinationsCoordinates);
+      }, 1500);
+    });
   }
 
   onKeyUp = ({ code }) => {
     if (code === "Space" || code === "ArrowRight") {
-      this.next();
+      this.props.next();
     }
   };
 
@@ -73,46 +66,37 @@ export class App extends React.Component<{
   unregisterEventListeners = () =>
     document.removeEventListener("keyup", this.onKeyUp);
 
-  next() {
-    const {
-      currentSlide,
-      currentPhotoIndex,
-      locationCoords,
-      displayPhoto,
-      travelMap
-    } = this.props;
-    const currentLocation: Location = travelMap[currentSlide];
-    console.log(currentLocation);
-    if (
-      !currentLocation.photos ||
-      currentPhotoIndex === currentLocation.photos.length
-    ) {
-      this.props.nextSlide();
-    } else {
-      this.props.nextPhoto();
-    }
-  }
-
   componentDidUpdate(prevProps) {
-    const { currentSlide, locationCoords } = this.props;
-    if (currentSlide !== prevProps.currentSlide) {
-      if (currentSlide > 0) {
-        addSolidSegments(this.map, locationCoords.slice(0, currentSlide));
+    const { currentDestinationIndex, destinations } = this.props;
+    if (currentDestinationIndex !== prevProps.currentDestinationIndex) {
+      if (currentDestinationIndex > 0) {
+        addSolidSegments(
+          this.map,
+          destinations
+            .slice(0, currentDestinationIndex)
+            .map(this.getDestinationCoords)
+        );
         this.zoomToBounds(
-          locationCoords.slice(
-            Math.max(currentSlide - 1, 0),
-            Math.min(currentSlide + 1, locationCoords.length)
-          )
+          destinations
+            .slice(
+              Math.max(currentDestinationIndex - 1, 0),
+              Math.min(currentDestinationIndex + 1, destinations.length)
+            )
+            .map(this.getDestinationCoords)
         );
         setTimeout(() => {
           addAnimatedSegment(
             this.map,
-            locationCoords.slice(currentSlide - 1, currentSlide + 1)
+            destinations
+              .slice(currentDestinationIndex - 1, currentDestinationIndex + 1)
+              .map(this.getDestinationCoords)
           );
         }, 500);
       }
     }
   }
+
+  getDestinationCoords = location => location.coords;
 
   zoomToBounds(coords) {
     const bounds = getBounds(coords);
@@ -123,11 +107,11 @@ export class App extends React.Component<{
   }
 
   render() {
-    const { displayPhoto, currentPhotoSource, displayMarkers } = this.props;
+    const { displayPhoto, currentPhoto, displayMarkers } = this.props;
     return (
       <main className={`main ${displayMarkers ? "" : "main--hide-markers"}`}>
         <div id="map" />
-        {displayPhoto && <img className="photo" src={currentPhotoSource} />}
+        {displayPhoto && <img className="photo" src={currentPhoto} />}
       </main>
     );
   }
@@ -135,17 +119,17 @@ export class App extends React.Component<{
 
 const mapStateToProps = state => ({
   displayMarkers: state.displayMarkers,
-  locationCoords: state.locationCoords,
-  currentSlide: state.currentSlide,
+  destinationsCoordinates: state.destinationsCoordinates,
+  currentDestinationIndex: state.currentDestinationIndex,
   displayPhoto: state.displayPhoto,
   currentPhotoIndex: state.currentPhotoIndex,
-  currentPhotoSource: state.currentPhotoSource,
-  travelMap: state.travelMap
+  currentPhoto: state.currentPhoto,
+  destinations: state.destinations,
+  currentDestination: state.currentDestination
 });
 const mapDispatchToProps = {
-  nextSlide,
-  nextPhoto,
-  setLocationCoords,
+  next,
+  setdestinationsCoordinates,
   showMarkers
 };
 

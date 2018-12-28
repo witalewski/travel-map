@@ -1,14 +1,10 @@
-export class NextSlideAction {
-  readonly type = "NEXT_SLIDE";
+export class NextAction {
+  readonly type = "NEXT";
 }
 
-export class NextPhotoAction {
-  readonly type = "NEXT_PHOTO";
-}
-
-export class SetLocationCoordsAction {
+export class SetdestinationsCoordinatesAction {
   readonly type = "SET_LOCATION_COORDS";
-  locationCoords: Location[];
+  destinationsCoordinates: Coords[];
 }
 
 export class ShowMarkersAction {
@@ -16,24 +12,19 @@ export class ShowMarkersAction {
 }
 
 export type Action =
-  | NextSlideAction
-  | NextPhotoAction
-  | SetLocationCoordsAction
+  | NextAction
+  | SetdestinationsCoordinatesAction
   | ShowMarkersAction;
 
-export const nextSlide: () => NextSlideAction = () => ({
-  type: "NEXT_SLIDE"
+export const next: () => NextAction = () => ({
+  type: "NEXT"
 });
 
-export const nextPhoto: () => NextPhotoAction = () => ({
-  type: "NEXT_PHOTO"
-});
-
-export const setLocationCoords: (
-  locationCoords: Location[]
-) => SetLocationCoordsAction = locationCoords => ({
+export const setdestinationsCoordinates: (
+  destinationsCoordinates: Coords[]
+) => SetdestinationsCoordinatesAction = destinationsCoordinates => ({
   type: "SET_LOCATION_COORDS",
-  locationCoords
+  destinationsCoordinates
 });
 
 export const showMarkers: () => ShowMarkersAction = () => ({

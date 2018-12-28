@@ -2,50 +2,70 @@ import { Action } from "./actions";
 import travelMap from "../../static/travelMap.yaml";
 
 const initialState: AppState = {
-  displayMarkers: false,
-  locationCoords: [],
-  currentSlide: 0,
-  displayPhoto: false,
+  destinations: travelMap,
+  currentDestinationIndex: 0,
+  currentDestination: travelMap[0],
   currentPhotoIndex: 0,
-  currentPhotoSource: "",
-  travelMap
+  currentPhoto: "",
+  displayPhoto: false,
+  displayMarkers: false
 };
+
+const hidePhoto: (state: AppState) => AppState = state => ({
+  ...state,
+  displayPhoto: false
+});
+
+const nextDestination: (state: AppState) => AppState = state => {
+  if (state.currentDestinationIndex < state.destinations.length - 1) {
+    return {
+      ...state,
+      currentPhotoIndex: 0,
+      displayPhoto: false,
+      currentDestinationIndex: state.currentDestinationIndex + 1,
+      currentDestination: state.destinations[state.currentDestinationIndex + 1]
+    };
+  }
+  return hidePhoto(state);
+};
+
+const nextPhoto: (state: AppState) => AppState = state => ({
+  ...state,
+  currentPhotoIndex: state.currentPhotoIndex + 1,
+  displayPhoto: true,
+  currentPhoto: state.currentDestination.photos[state.currentPhotoIndex]
+});
+
+const isShowingLastPhotoInDestination: (state: AppState) => boolean = state =>
+  !state.currentDestination.photos ||
+  state.currentPhotoIndex === state.currentDestination.photos.length;
+
+const addCoordinatesToLocations: (
+  state: AppState,
+  coordsList: Coords[]
+) => AppState = (state, coordsList) => ({
+  ...state,
+  destinations: state.destinations.map((location, i) => ({
+    ...location,
+    coords: coordsList[i]
+  }))
+});
 
 export const rootReducer: (state: AppState, action: Action) => AppState = (
   state = initialState,
   action
 ) => {
   switch (action.type) {
-    case "NEXT_SLIDE": {
+    case "NEXT": {
       {
-        if (state.currentSlide < state.locationCoords.length - 1) {
-          return {
-            ...state,
-            currentPhotoIndex: 0,
-            displayPhoto: false,
-            currentSlide: state.currentSlide + 1
-          };
+        if (isShowingLastPhotoInDestination(state)) {
+          return nextDestination(state);
         }
-        return {
-          ...state,
-          displayPhoto: false
-        };
+        return nextPhoto(state);
       }
     }
-    case "NEXT_PHOTO": {
-      const currentLocation: Location = state.travelMap[state.currentSlide];
-      return {
-        ...state,
-        currentPhotoIndex: state.currentPhotoIndex + 1,
-        displayPhoto: true,
-        currentPhotoSource: currentLocation.photos[state.currentPhotoIndex]
-      };
-    }
     case "SET_LOCATION_COORDS": {
-      return {
-        ...state,
-        locationCoords: action.locationCoords
-      };
+      return addCoordinatesToLocations(state, action.destinationsCoordinates);
     }
     case "SHOW_MARKERS": {
       return {
