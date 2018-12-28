@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 
 import india from "../static/india.yaml";
 import {
@@ -10,7 +10,6 @@ import {
   addRoute,
   addSolidSegments
 } from "./map";
-import { Promise } from "q";
 
 export class App extends React.Component {
   constructor(props) {
