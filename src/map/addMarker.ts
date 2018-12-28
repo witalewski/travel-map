@@ -15,7 +15,7 @@ const getMarkerIcon = location => {
   return markerElement;
 };
 
-export const addMarker = (location, map) =>
+export const addMarker: (location:any, map:MapglMap) => Promise<MapglMarker> = (location, map) =>
   new Promise(resolve => {
     const mapboxClient = mapboxSdk({ accessToken: getAccessToken() });
     mapboxClient.geocoding

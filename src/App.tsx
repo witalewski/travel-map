@@ -24,6 +24,9 @@ export class App extends React.Component {
     };
   }
 
+  state:AppState;
+  map:MapglMap;
+
   componentDidMount() {
     this.map = renderMap("map");
 
@@ -31,7 +34,7 @@ export class App extends React.Component {
       addMarker(location, this.map)
     );
     Promise.all(locationPromises).then(markers => {
-      const locationCoords = markers.map(marker => marker._lngLat);
+      const locationCoords = markers.map((marker:MapglMarker) => marker._lngLat);
       this.setState({
         locationCoords
       });
