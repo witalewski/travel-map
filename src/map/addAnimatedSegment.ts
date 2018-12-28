@@ -2,7 +2,7 @@ import { interpolateLine } from "./interpolateLine";
 export const addAnimatedSegment: (
   map: MapglMap,
   coordsList: Coords[],
-  reverse?: boolean
+  reverse: boolean
 ) => void = (map, coordsList, reverse) => {
   const animationCoords = interpolateLine(coordsList[0], coordsList[1], 24);
 
