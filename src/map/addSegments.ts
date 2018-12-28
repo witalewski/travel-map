@@ -1,18 +1,15 @@
 import { createLineStringFeature } from "./createLineStringFeature";
-import { createLineLayer } from "./createLineLayer";
+import { createOrUpdateLineLayer } from "./createOrUpdateLineLayer";
 
 export const addSegments: (
   map: MapglMap,
   coordsList: Coords[],
   id: string,
   opacity: number
-) => void = (map, coordsList, id, opacity) => {
-  const geojson = createLineStringFeature(
-    coordsList.map(coords => [coords.lng, coords.lat])
+) => void = (map, coordsList, id, opacity) =>
+  createOrUpdateLineLayer(
+    map,
+    id,
+    createLineStringFeature(coordsList.map(coords => [coords.lng, coords.lat])),
+    opacity
   );
-  if (!map.getSource(id)) {
-    map.addLayer(createLineLayer(id, geojson, opacity));
-  } else {
-    map.getSource(id).setData(geojson);
-  }
-};
