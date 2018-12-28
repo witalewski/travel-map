@@ -54,7 +54,7 @@ export const rootReducer: (state: AppState, action: Action) => AppState = (
       };
     }
     case "PREV": {
-      return state.previousState;
+      return state.previousState ? state.previousState : state;
     }
     default:
       return state;

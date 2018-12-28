@@ -73,7 +73,7 @@ export class App extends React.Component<
     }, 1500);
   }
 
-  showNextDestination() {
+  updateDestination(reverseAnimation?: boolean) {
     const { currentDestinationIndex } = this.props;
     const { destinationsCoordinates } = this.state;
     addSolidSegments(
@@ -87,7 +87,8 @@ export class App extends React.Component<
         destinationsCoordinates.slice(
           currentDestinationIndex - 1,
           currentDestinationIndex + 1
-        )
+        ),
+        reverseAnimation
       );
     }, 500);
   }
@@ -96,8 +97,10 @@ export class App extends React.Component<
     const { currentDestinationIndex } = this.props;
     if (currentDestinationIndex === 0) {
       this.showInitialView();
-    } else if (currentDestinationIndex !== prevProps.currentDestinationIndex) {
-      this.showNextDestination();
+    } else if (currentDestinationIndex > prevProps.currentDestinationIndex) {
+      this.updateDestination();
+    } else if (currentDestinationIndex < prevProps.currentDestinationIndex) {
+      this.updateDestination(true);
     }
   }
 

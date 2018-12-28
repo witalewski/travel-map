@@ -1,8 +1,9 @@
 import { interpolateLine } from "./interpolateLine";
 export const addAnimatedSegment: (
   map: MapglMap,
-  coordsList: Coords[]
-) => void = (map, coordsList) => {
+  coordsList: Coords[],
+  reverse?: boolean
+) => void = (map, coordsList, reverse) => {
   const animationCoords = interpolateLine(coordsList[0], coordsList[1], 24);
 
   const geojson = {
@@ -10,7 +11,7 @@ export const addAnimatedSegment: (
     properties: {},
     geometry: {
       type: "LineString",
-      coordinates: []
+      coordinates: reverse ? [...animationCoords] : []
     }
   };
 
@@ -32,10 +33,14 @@ export const addAnimatedSegment: (
         "line-opacity": 1
       }
     });
+  } else {
+    map.getSource(`animated-segment`).setData(geojson);
   }
 
   const animateLine = i => {
-    geojson.geometry.coordinates.push(animationCoords[i]);
+    reverse
+      ? geojson.geometry.coordinates.pop()
+      : geojson.geometry.coordinates.push(animationCoords[i]);
     map.getSource(`animated-segment`).setData(geojson);
     if (i < animationCoords.length - 1) {
       requestAnimationFrame(() => animateLine(i + 1));

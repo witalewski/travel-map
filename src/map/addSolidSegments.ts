@@ -30,6 +30,6 @@ export const addSolidSegments: (map: MapglMap, coordsList: Coords[]) => void = (
       }
     });
   } else {
-    map.getSource(`solid-segments`).setData(geojson);
+    map.getSource("solid-segments").setData(geojson);
   }
 };
