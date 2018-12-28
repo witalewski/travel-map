@@ -35,12 +35,6 @@ export class App extends React.Component<
     }
   };
 
-  registerEventListeners = () =>
-    document.addEventListener("keyup", this.onKeyUp);
-
-  unregisterEventListeners = () =>
-    document.removeEventListener("keyup", this.onKeyUp);
-
   setupMap() {
     const { destinations } = this.props;
     this.map = renderMap("map");
@@ -57,11 +51,11 @@ export class App extends React.Component<
 
   componentDidMount() {
     this.setupMap();
-    this.registerEventListeners();
+    document.addEventListener("keyup", this.onKeyUp);
   }
 
   componentWillUnmount() {
-    this.unregisterEventListeners();
+    document.removeEventListener("keyup", this.onKeyUp);
   }
 
   zoomToBounds(start?: number, end?: number) {
