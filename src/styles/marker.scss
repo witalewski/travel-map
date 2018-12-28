@@ -1,0 +1,19 @@
+.marker {
+  width: 40px;
+  height: 40px;
+
+  background-size: cover;
+
+  border: 1px solid black;
+  border-radius: 20px;
+
+  z-index: 2;
+
+  .label {
+    transform: translate(50px, calc(20px - 50%));
+    font-size: 20px;
+    font-weight: bold;
+
+    z-index: 1;
+  }
+}
