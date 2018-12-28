@@ -7,7 +7,6 @@ export const addAnimatedSegment: (
   reverse: boolean
 ) => void = (map, coordsList, reverse) => {
   const animationCoords = interpolateLine(coordsList[0], coordsList[1], 24);
-
   const geojson = createLineStringFeature(reverse ? [...animationCoords] : []);
 
   if (!map.getSource("animated-segment")) {
@@ -17,10 +16,14 @@ export const addAnimatedSegment: (
   }
 
   const animateLine = i => {
-    reverse
-      ? geojson.geometry.coordinates.pop()
-      : geojson.geometry.coordinates.push(animationCoords[i]);
+    if (reverse) {
+      geojson.geometry.coordinates.pop();
+    } else {
+      geojson.geometry.coordinates.push(animationCoords[i]);
+    }
+
     map.getSource(`animated-segment`).setData(geojson);
+
     if (i < animationCoords.length - 1) {
       requestAnimationFrame(() => animateLine(i + 1));
     }
