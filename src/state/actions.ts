@@ -1,9 +1,11 @@
-export class NextAction {
-  readonly type = "NEXT";
+export interface Action {
+  readonly type: string;
 }
 
-export type Action = NextAction;
-
-export const next: () => NextAction = () => ({
+export const next: () => Action = () => ({
   type: "NEXT"
+});
+
+export const prev: () => Action = () => ({
+  type: "PREV"
 });
