@@ -1,6 +1,7 @@
 import * as React from "react";
+import { connect } from "react-redux";
+import { func, string, number, arrayOf, bool, shape } from "prop-types";
 
-import travelMap from "../static/travelMap.yaml";
 import {
   renderMap,
   addMarker,
@@ -9,21 +10,26 @@ import {
   addRoute,
   addSolidSegments
 } from "./map";
+import {
+  nextSlide,
+  nextPhoto,
+  setLocationCoords,
+  showMarkers
+} from "./state/actions";
 
-export class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      showMarkers: false,
-      locationCoords: [],
-      currentSlide: 0,
-      showPhoto: false,
-      currentPhotoIndex: 0,
-      currentPhotoSource: ""
-    };
-  }
-
-  state: AppState;
+export class App extends React.Component<{
+  displayMarkers: boolean;
+  locationCoords: Coords[];
+  currentSlide: number;
+  displayPhoto: boolean;
+  currentPhotoIndex: number;
+  currentPhotoSource: string;
+  travelMap: Location[];
+  nextSlide: () => void;
+  nextPhoto: () => void;
+  setLocationCoords: (locationCoords: Location[]) => void;
+  showMarkers: () => void;
+}> {
   map: MapglMap;
 
   componentDidMount() {
@@ -42,17 +48,17 @@ export class App extends React.Component {
 
   setupMap() {
     this.map = renderMap("map");
-    Promise.all(travelMap.map(this.addLocationMarker)).then(markers => {
-      const locationCoords = this.getLocationCoords(markers);
-      this.setState({
-        locationCoords
-      });
-      this.zoomToBounds(locationCoords);
-      setTimeout(() => {
-        this.setState({ showMarkers: true });
-        addRoute(this.map, locationCoords);
-      }, 1500);
-    });
+    Promise.all(this.props.travelMap.map(this.addLocationMarker)).then(
+      markers => {
+        const locationCoords = this.getLocationCoords(markers);
+        this.props.setLocationCoords(locationCoords);
+        this.zoomToBounds(locationCoords);
+        setTimeout(() => {
+          this.props.showMarkers();
+          addRoute(this.map, locationCoords);
+        }, 1500);
+      }
+    );
   }
 
   onKeyUp = ({ code }) => {
@@ -72,36 +78,24 @@ export class App extends React.Component {
       currentSlide,
       currentPhotoIndex,
       locationCoords,
-      showPhoto
-    } = this.state;
-    const currentLocation = travelMap[currentSlide];
+      displayPhoto,
+      travelMap
+    } = this.props;
+    const currentLocation: Location = travelMap[currentSlide];
+    console.log(currentLocation);
     if (
       !currentLocation.photos ||
       currentPhotoIndex === currentLocation.photos.length
     ) {
-      if (currentSlide < locationCoords.length - 1) {
-        this.setState({
-          currentPhotoIndex: 0,
-          showPhoto: false,
-          currentSlide: currentSlide + 1
-        });
-      } else if (showPhoto) {
-        this.setState({
-          showPhoto: false
-        });
-      }
+      this.props.nextSlide();
     } else {
-      this.setState({
-        currentPhotoIndex: currentPhotoIndex + 1,
-        showPhoto: true,
-        currentPhotoSource: currentLocation.photos[currentPhotoIndex]
-      });
+      this.props.nextPhoto();
     }
   }
 
-  componentDidUpdate(_, prevState) {
-    const { currentSlide, locationCoords } = this.state;
-    if (currentSlide !== prevState.currentSlide) {
+  componentDidUpdate(prevProps) {
+    const { currentSlide, locationCoords } = this.props;
+    if (currentSlide !== prevProps.currentSlide) {
       if (currentSlide > 0) {
         addSolidSegments(this.map, locationCoords.slice(0, currentSlide));
         this.zoomToBounds(
@@ -129,14 +123,33 @@ export class App extends React.Component {
   }
 
   render() {
-    const { showPhoto, currentPhotoSource } = this.state;
+    const { displayPhoto, currentPhotoSource, displayMarkers } = this.props;
     return (
-      <main
-        className={`main ${this.state.showMarkers ? "" : "main--hide-markers"}`}
-      >
+      <main className={`main ${displayMarkers ? "" : "main--hide-markers"}`}>
         <div id="map" />
-        {showPhoto && <img className="photo" src={currentPhotoSource} />}
+        {displayPhoto && <img className="photo" src={currentPhotoSource} />}
       </main>
     );
   }
 }
+
+const mapStateToProps = state => ({
+  displayMarkers: state.displayMarkers,
+  locationCoords: state.locationCoords,
+  currentSlide: state.currentSlide,
+  displayPhoto: state.displayPhoto,
+  currentPhotoIndex: state.currentPhotoIndex,
+  currentPhotoSource: state.currentPhotoSource,
+  travelMap: state.travelMap
+});
+const mapDispatchToProps = {
+  nextSlide,
+  nextPhoto,
+  setLocationCoords,
+  showMarkers
+};
+
+export const AppConnected = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);

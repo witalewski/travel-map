@@ -2,6 +2,7 @@ export const addRoute: (map: MapglMap, coordsList: Coords[]) => void = (
   map,
   coordsList
 ) => {
+  console.log("addroute")
   const geojson = {
     type: "Feature",
     properties: {},

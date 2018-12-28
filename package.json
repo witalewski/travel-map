@@ -12,6 +12,8 @@
     "parcel": "^1.11.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
+    "react-redux": "^6.0.0",
+    "redux": "^4.0.1",
     "typescript": "^3.2.2"
   },
   "devDependencies": {

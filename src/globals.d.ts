@@ -1,3 +1,4 @@
+declare module "*";
 declare const mapboxSdk, mapboxgl: any;
 
 interface MapglMap {
@@ -6,13 +7,19 @@ interface MapglMap {
   addLayer: any;
 }
 
+interface Location {
+  name: string;
+  photos?: string[];
+}
+
 interface AppState {
-  showMarkers: boolean;
+  displayMarkers: boolean;
   locationCoords: any[];
   currentSlide: number;
-  showPhoto: boolean;
+  displayPhoto: boolean;
   currentPhotoIndex: number;
   currentPhotoSource: string;
+  travelMap: Location[];
 }
 
 interface Coords {
