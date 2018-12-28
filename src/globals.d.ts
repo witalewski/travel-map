@@ -14,13 +14,13 @@ interface Destination {
 }
 
 interface AppState {
+  previousState: AppState;
   destinations: Destination[];
   currentDestinationIndex: number;
   currentDestination: Destination;
   currentPhotoIndex: number;
   currentPhoto: string;
   displayPhoto: boolean;
-  displayMarkers: boolean;
 }
 
 interface Coords {

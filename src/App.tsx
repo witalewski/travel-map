@@ -9,21 +9,26 @@ import {
   addRoute,
   addSolidSegments
 } from "./map";
-import { next, setdestinationsCoordinates, showMarkers } from "./state/actions";
+import { next } from "./state/actions";
 
-export class App extends React.Component<{
-  displayMarkers: boolean;
-  destinationsCoordinates: Coords[];
-  currentDestinationIndex: number;
-  displayPhoto: boolean;
-  currentPhotoIndex: number;
-  currentPhoto: string;
-  destinations: Destination[];
-  currentDestination: Destination;
-  next: () => void;
-  setdestinationsCoordinates: (destinationsCoordinates: Destination[]) => void;
-  showMarkers: () => void;
-}> {
+export class App extends React.Component<
+  {
+    destinations: Destination[];
+    currentDestinationIndex: number;
+    currentDestination: Destination;
+    currentPhotoIndex: number;
+    currentPhoto: string;
+    displayPhoto: boolean;
+    next: () => void;
+    showMarkers: () => void;
+  },
+  { displayMarkers: Boolean; destinationsCoordinates: Coords[] }
+> {
+  state = {
+    displayMarkers: false,
+    destinationsCoordinates: []
+  };
+
   map: MapglMap;
 
   componentDidMount() {
@@ -41,14 +46,14 @@ export class App extends React.Component<{
     markers.map((marker: MapglMarker) => marker._lngLat);
 
   setupMap() {
-    const { destinations, showMarkers } = this.props;
+    const { destinations } = this.props;
     this.map = renderMap("map");
     Promise.all(destinations.map(this.addDestinationMarker)).then(markers => {
       const destinationsCoordinates = this.getdestinationsCoordinates(markers);
-      this.props.setdestinationsCoordinates(destinationsCoordinates);
+      this.setState({ destinationsCoordinates });
       this.zoomToBounds(destinationsCoordinates);
       setTimeout(() => {
-        showMarkers();
+        this.setState({ displayMarkers: true });
         addRoute(this.map, destinationsCoordinates);
       }, 1500);
     });
@@ -67,36 +72,32 @@ export class App extends React.Component<{
     document.removeEventListener("keyup", this.onKeyUp);
 
   componentDidUpdate(prevProps) {
-    const { currentDestinationIndex, destinations } = this.props;
+    const { currentDestinationIndex } = this.props;
+    const { destinationsCoordinates } = this.state;
     if (currentDestinationIndex !== prevProps.currentDestinationIndex) {
       if (currentDestinationIndex > 0) {
         addSolidSegments(
           this.map,
-          destinations
+          destinationsCoordinates
             .slice(0, currentDestinationIndex)
-            .map(this.getDestinationCoords)
         );
         this.zoomToBounds(
-          destinations
+          destinationsCoordinates
             .slice(
               Math.max(currentDestinationIndex - 1, 0),
-              Math.min(currentDestinationIndex + 1, destinations.length)
+              Math.min(currentDestinationIndex + 1, destinationsCoordinates.length)
             )
-            .map(this.getDestinationCoords)
         );
         setTimeout(() => {
           addAnimatedSegment(
             this.map,
-            destinations
+            destinationsCoordinates
               .slice(currentDestinationIndex - 1, currentDestinationIndex + 1)
-              .map(this.getDestinationCoords)
           );
         }, 500);
       }
     }
   }
-
-  getDestinationCoords = location => location.coords;
 
   zoomToBounds(coords) {
     const bounds = getBounds(coords);
@@ -107,9 +108,13 @@ export class App extends React.Component<{
   }
 
   render() {
-    const { displayPhoto, currentPhoto, displayMarkers } = this.props;
+    const { displayPhoto, currentPhoto } = this.props;
     return (
-      <main className={`main ${displayMarkers ? "" : "main--hide-markers"}`}>
+      <main
+        className={`main ${
+          this.state.displayMarkers ? "" : "main--hide-markers"
+        }`}
+      >
         <div id="map" />
         {displayPhoto && <img className="photo" src={currentPhoto} />}
       </main>
@@ -118,19 +123,15 @@ export class App extends React.Component<{
 }
 
 const mapStateToProps = state => ({
-  displayMarkers: state.displayMarkers,
-  destinationsCoordinates: state.destinationsCoordinates,
+  destinations: state.destinations,
   currentDestinationIndex: state.currentDestinationIndex,
-  displayPhoto: state.displayPhoto,
+  currentDestination: state.currentDestination,
   currentPhotoIndex: state.currentPhotoIndex,
   currentPhoto: state.currentPhoto,
-  destinations: state.destinations,
-  currentDestination: state.currentDestination
+  displayPhoto: state.displayPhoto
 });
 const mapDispatchToProps = {
-  next,
-  setdestinationsCoordinates,
-  showMarkers
+  next
 };
 
 export const AppConnected = connect(

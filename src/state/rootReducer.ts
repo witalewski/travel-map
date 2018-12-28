@@ -2,14 +2,18 @@ import { Action } from "./actions";
 import travelMap from "../../static/travelMap.yaml";
 
 const initialState: AppState = {
+  previousState: null,
   destinations: travelMap,
   currentDestinationIndex: 0,
   currentDestination: travelMap[0],
   currentPhotoIndex: 0,
   currentPhoto: "",
-  displayPhoto: false,
-  displayMarkers: false
+  displayPhoto: false
 };
+
+const isShowingLastPhotoInDestination: (state: AppState) => boolean = state =>
+  !state.currentDestination.photos ||
+  state.currentPhotoIndex === state.currentDestination.photos.length;
 
 const hidePhoto: (state: AppState) => AppState = state => ({
   ...state,
@@ -36,19 +40,11 @@ const nextPhoto: (state: AppState) => AppState = state => ({
   currentPhoto: state.currentDestination.photos[state.currentPhotoIndex]
 });
 
-const isShowingLastPhotoInDestination: (state: AppState) => boolean = state =>
-  !state.currentDestination.photos ||
-  state.currentPhotoIndex === state.currentDestination.photos.length;
-
-const addCoordinatesToLocations: (
-  state: AppState,
-  coordsList: Coords[]
-) => AppState = (state, coordsList) => ({
-  ...state,
-  destinations: state.destinations.map((location, i) => ({
-    ...location,
-    coords: coordsList[i]
-  }))
+const nextState = state => ({
+  ...(isShowingLastPhotoInDestination(state)
+    ? nextDestination(state)
+    : nextPhoto(state)),
+  prevState: state
 });
 
 export const rootReducer: (state: AppState, action: Action) => AppState = (
@@ -57,21 +53,7 @@ export const rootReducer: (state: AppState, action: Action) => AppState = (
 ) => {
   switch (action.type) {
     case "NEXT": {
-      {
-        if (isShowingLastPhotoInDestination(state)) {
-          return nextDestination(state);
-        }
-        return nextPhoto(state);
-      }
-    }
-    case "SET_LOCATION_COORDS": {
-      return addCoordinatesToLocations(state, action.destinationsCoordinates);
-    }
-    case "SHOW_MARKERS": {
-      return {
-        ...state,
-        displayMarkers: true
-      };
+      return nextState(state);
     }
     default:
       return state;
