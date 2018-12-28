@@ -8,7 +8,8 @@ export const renderMap: (elementId: string) => MapglMap = elementId => {
     center: [0, 0],
     zoom: 1,
     minZoom: 0,
-    maxZoom: 24
+    maxZoom: 24,
+    keyboard: false
   });
   return map;
 };

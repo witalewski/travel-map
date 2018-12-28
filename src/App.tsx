@@ -27,31 +27,45 @@ export class App extends React.Component {
   map: MapglMap;
 
   componentDidMount() {
-    this.map = renderMap("map");
+    this.setupMap();
+    this.registerEventListeners();
+  }
 
-    const locationPromises = travelMap.map(location =>
-      addMarker(location, this.map)
-    );
-    Promise.all(locationPromises).then(markers => {
-      const locationCoords = markers.map(
-        (marker: MapglMarker) => marker._lngLat
-      );
+  componentWillUnmount() {
+    this.unregisterEventListeners();
+  }
+
+  addLocationMarker = location => addMarker(location, this.map);
+
+  getLocationCoords = markers =>
+    markers.map((marker: MapglMarker) => marker._lngLat);
+
+  setupMap() {
+    this.map = renderMap("map");
+    Promise.all(travelMap.map(this.addLocationMarker)).then(markers => {
+      const locationCoords = this.getLocationCoords(markers);
       this.setState({
         locationCoords
       });
-      this.zoomToBounds(this.state.locationCoords);
+      this.zoomToBounds(locationCoords);
       setTimeout(() => {
         this.setState({ showMarkers: true });
         addRoute(this.map, locationCoords);
       }, 1500);
     });
-
-    document.addEventListener("keyup", event => {
-      if (event.code === "Space") {
-        this.next();
-      }
-    });
   }
+
+  onKeyUp = ({ code }) => {
+    if (code === "Space" || code === "ArrowRight") {
+      this.next();
+    }
+  };
+
+  registerEventListeners = () =>
+    document.addEventListener("keyup", this.onKeyUp);
+
+  unregisterEventListeners = () =>
+    document.removeEventListener("keyup", this.onKeyUp);
 
   next() {
     const {
