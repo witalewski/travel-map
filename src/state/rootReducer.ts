@@ -40,20 +40,21 @@ const nextPhoto: (state: AppState) => AppState = state => ({
   currentPhoto: state.currentDestination.photos[state.currentPhotoIndex]
 });
 
-const nextState = state => ({
-  ...(isShowingLastPhotoInDestination(state)
-    ? nextDestination(state)
-    : nextPhoto(state)),
-  prevState: state
-});
-
 export const rootReducer: (state: AppState, action: Action) => AppState = (
   state = initialState,
   action
 ) => {
   switch (action.type) {
     case "NEXT": {
-      return nextState(state);
+      return {
+        ...(isShowingLastPhotoInDestination(state)
+          ? nextDestination(state)
+          : nextPhoto(state)),
+          previousState: state
+      };
+    }
+    case "PREV": {
+      return state.previousState;
     }
     default:
       return state;

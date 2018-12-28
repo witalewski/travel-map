@@ -4,12 +4,12 @@ import { connect } from "react-redux";
 import {
   renderMap,
   addMarker,
-  getBounds,
   addAnimatedSegment,
   addRoute,
-  addSolidSegments
+  addSolidSegments,
+  fitBounds
 } from "./map";
-import { next } from "./state/actions";
+import { next, prev } from "./state/actions";
 
 export class App extends React.Component<
   {
@@ -18,7 +18,7 @@ export class App extends React.Component<
     currentPhoto: string;
     displayPhoto: boolean;
     next: () => void;
-    showMarkers: () => void;
+    prev: () => void;
   },
   { displayMarkers: Boolean; destinationsCoordinates: Coords[] }
 > {
@@ -32,6 +32,8 @@ export class App extends React.Component<
   onKeyUp = ({ code }) => {
     if (code === "Space" || code === "ArrowRight") {
       this.props.next();
+    } else if (code === "ArrowLeft") {
+      this.props.prev();
     }
   };
 
@@ -59,18 +61,7 @@ export class App extends React.Component<
   }
 
   zoomToBounds(start?: number, end?: number) {
-    const { destinationsCoordinates } = this.state;
-    const dcLength = destinationsCoordinates.length;
-    const bounds = getBounds(
-      destinationsCoordinates.slice(
-        isNaN(start) ? 0 : Math.max(0, start),
-        isNaN(end) ? dcLength : end
-      )
-    );
-    this.map.fitBounds(
-      [[bounds.sw.lng, bounds.sw.lat], [bounds.ne.lng, bounds.ne.lat]],
-      { maxZoom: 24, padding: { top: 200, bottom: 200, left: 400, right: 400 } }
-    );
+    fitBounds(this.map, this.state.destinationsCoordinates, start, end);
   }
 
   showInitialView() {
@@ -132,7 +123,8 @@ const mapStateToProps = state => ({
   displayPhoto: state.displayPhoto
 });
 const mapDispatchToProps = {
-  next
+  next,
+  prev
 };
 
 export const AppConnected = connect(
