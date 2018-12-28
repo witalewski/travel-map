@@ -1,4 +1,6 @@
 import { interpolateLine } from "./interpolateLine";
+import { createLineStringFeature } from "./createLineStringFeature";
+import { createLineLayer } from "./createLineLayer";
 export const addAnimatedSegment: (
   map: MapglMap,
   coordsList: Coords[],
@@ -6,33 +8,10 @@ export const addAnimatedSegment: (
 ) => void = (map, coordsList, reverse) => {
   const animationCoords = interpolateLine(coordsList[0], coordsList[1], 24);
 
-  const geojson = {
-    type: "Feature",
-    properties: {},
-    geometry: {
-      type: "LineString",
-      coordinates: reverse ? [...animationCoords] : []
-    }
-  };
+  const geojson = createLineStringFeature(reverse ? [...animationCoords] : []);
 
   if (!map.getSource("animated-segment")) {
-    map.addLayer({
-      id: `animated-segment`,
-      type: "line",
-      source: {
-        type: "geojson",
-        data: geojson
-      },
-      layout: {
-        "line-join": "round",
-        "line-cap": "round"
-      },
-      paint: {
-        "line-color": "#cb4b16",
-        "line-width": 8,
-        "line-opacity": 1
-      }
-    });
+    map.addLayer(createLineLayer("animated-segment", geojson, 1));
   } else {
     map.getSource(`animated-segment`).setData(geojson);
   }
