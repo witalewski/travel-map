@@ -15,10 +15,16 @@ const isShowingLastPhotoInDestination: (state: AppState) => boolean = state =>
   !state.currentDestination.photos ||
   state.currentPhotoIndex === state.currentDestination.photos.length;
 
-const hidePhoto: (state: AppState) => AppState = state => ({
-  ...state,
-  displayPhoto: false
-});
+const hidePhoto: (state: AppState) => AppState = state => {
+  if (!state.displayPhoto) {
+    return state;
+  }
+  return {
+    ...state,
+    displayPhoto: false,
+    previousState: state
+  };
+};
 
 const nextDestination: (state: AppState) => AppState = state => {
   if (state.currentDestinationIndex < state.destinations.length - 1) {
@@ -27,7 +33,8 @@ const nextDestination: (state: AppState) => AppState = state => {
       currentPhotoIndex: 0,
       displayPhoto: false,
       currentDestinationIndex: state.currentDestinationIndex + 1,
-      currentDestination: state.destinations[state.currentDestinationIndex + 1]
+      currentDestination: state.destinations[state.currentDestinationIndex + 1],
+      previousState: state
     };
   }
   return hidePhoto(state);
@@ -37,7 +44,8 @@ const nextPhoto: (state: AppState) => AppState = state => ({
   ...state,
   currentPhotoIndex: state.currentPhotoIndex + 1,
   displayPhoto: true,
-  currentPhoto: state.currentDestination.photos[state.currentPhotoIndex]
+  currentPhoto: state.currentDestination.photos[state.currentPhotoIndex],
+  previousState: state
 });
 
 export const rootReducer: (state: AppState, action: Action) => AppState = (
@@ -46,12 +54,9 @@ export const rootReducer: (state: AppState, action: Action) => AppState = (
 ) => {
   switch (action.type) {
     case "NEXT": {
-      return {
-        ...(isShowingLastPhotoInDestination(state)
-          ? nextDestination(state)
-          : nextPhoto(state)),
-          previousState: state
-      };
+      return isShowingLastPhotoInDestination(state)
+        ? nextDestination(state)
+        : nextPhoto(state);
     }
     case "PREV": {
       return state.previousState ? state.previousState : state;
