@@ -1,11 +1,10 @@
 import * as React from "react";
 
-import india from "../static/india.yaml";
+import travelMap from "../static/travelMap.yaml";
 import {
   renderMap,
   addMarker,
   getBounds,
-  scaleBounds,
   addAnimatedSegment,
   addRoute,
   addSolidSegments
@@ -24,17 +23,19 @@ export class App extends React.Component {
     };
   }
 
-  state:AppState;
-  map:MapglMap;
+  state: AppState;
+  map: MapglMap;
 
   componentDidMount() {
     this.map = renderMap("map");
 
-    const locationPromises = india.map(location =>
+    const locationPromises = travelMap.map(location =>
       addMarker(location, this.map)
     );
     Promise.all(locationPromises).then(markers => {
-      const locationCoords = markers.map((marker:MapglMarker) => marker._lngLat);
+      const locationCoords = markers.map(
+        (marker: MapglMarker) => marker._lngLat
+      );
       this.setState({
         locationCoords
       });
@@ -59,7 +60,7 @@ export class App extends React.Component {
       locationCoords,
       showPhoto
     } = this.state;
-    const currentLocation = india[currentSlide];
+    const currentLocation = travelMap[currentSlide];
     if (
       !currentLocation.photos ||
       currentPhotoIndex === currentLocation.photos.length
@@ -114,15 +115,13 @@ export class App extends React.Component {
   }
 
   render() {
+    const { showPhoto, currentPhotoSource } = this.state;
     return (
       <main
         className={`main ${this.state.showMarkers ? "" : "main--hide-markers"}`}
       >
         <div id="map" />
-        <img
-          className={`photo ${this.state.showPhoto ? "" : "photo--hidden"}`}
-          src={this.state.currentPhotoSource}
-        />
+        {showPhoto && <img className="photo" src={currentPhotoSource} />}
       </main>
     );
   }
