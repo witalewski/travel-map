@@ -1,5 +1,8 @@
 import { interpolateLine } from "./interpolateLine";
-export const addAnimatedSegment = (map, coordsList) => {
+export const addAnimatedSegment: (
+  map: MapglMap,
+  coordsList: Coords[]
+) => void = (map, coordsList) => {
   const animationCoords = interpolateLine(coordsList[0], coordsList[1], 24);
 
   const geojson = {

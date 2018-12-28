@@ -1,4 +1,7 @@
-export const addSolidSegments = (map, coordsList) => {
+export const addSolidSegments: (map: MapglMap, coordsList: Coords[]) => void = (
+  map,
+  coordsList
+) => {
   const geojson = {
     type: "Feature",
     properties: {},

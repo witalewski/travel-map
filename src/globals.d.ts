@@ -2,6 +2,8 @@ declare const mapboxSdk, mapboxgl: any;
 
 interface MapglMap {
   fitBounds: (bounds: number[][], options: any) => void;
+  getSource: any;
+  addLayer: any;
 }
 
 interface AppState {
@@ -13,9 +15,16 @@ interface AppState {
   currentPhotoSource: string;
 }
 
+interface Coords {
+  lng: number;
+  lat: number;
+}
+
+interface Bounds {
+  sw: Coords;
+  ne: Coords;
+}
+
 interface MapglMarker {
-  _lngLat: {
-    lng: number;
-    lat: number;
-  };
+  _lngLat: Coords;
 }

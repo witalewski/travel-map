@@ -1,6 +1,6 @@
 import { getAccessToken } from "./getAccessToken";
 
-export const renderMap = elementId => {
+export const renderMap: (elementId: string) => MapglMap = elementId => {
   mapboxgl.accessToken = getAccessToken();
   const map = new mapboxgl.Map({
     container: elementId,

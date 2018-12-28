@@ -1,4 +1,7 @@
-export const addRoute = (map, coordsList) => {
+export const addRoute: (map: MapglMap, coordsList: Coords[]) => void = (
+  map,
+  coordsList
+) => {
   map.addLayer({
     id: "route",
     type: "line",

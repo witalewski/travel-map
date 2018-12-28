@@ -1,4 +1,8 @@
-export const interpolateLine = (p1, p2, steps) => {
+export const interpolateLine: (
+  p1: Coords,
+  p2: Coords,
+  steps: number
+) => number[][] = (p1, p2, steps) => {
   const xstep = (p2.lng - p1.lng) / steps;
   const ystep = (p2.lat - p1.lat) / steps;
 

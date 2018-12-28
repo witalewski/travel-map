@@ -1,4 +1,4 @@
-export const getBounds = items => {
+export const getBounds: (items: Coords[]) => Bounds = items => {
   const initialBounds = {
     sw: {
       lat: Infinity,
