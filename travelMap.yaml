@@ -1,0 +1,31 @@
+- name: "Mumbai"
+- name: "Goa"
+  photos:
+  - "goa-1.jpg"
+  - "goa-3.jpg"
+  - "goa-4.jpg"
+- name: "Hampi"
+  photos:
+  - "hampi-1.jpg"
+  - "hampi-2.jpg"
+- name: "Bangalore"
+  photos:
+  - "bangalore-1.jpg"
+  - "bangalore-2.jpg"
+- name: "Periyar"
+  photos:
+  - "kumily-1.jpg"
+  - "kumily-2.jpg"
+- name: "Kochi"
+  photos:
+  - "kochi-1.jpg"
+  - "kochi-2.jpg"
+  - "kochi-3.jpg"
+- name: "Alleppey"
+  photos:
+  - "alleppey-2.jpg"
+  - "alleppey-3.jpg"
+- name: "Mumbai"
+  photos:
+  - "mumbai-1.jpg"
+  - "mumbai-2.jpg"
