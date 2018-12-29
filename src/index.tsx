@@ -9,13 +9,11 @@ import { AppConnected } from "./App";
 import { rootReducer } from "./state/rootReducer";
 import { receiveDestinations } from "./state/actions";
 
-const store = createStore(
-  rootReducer,
+const store =
   process.env.NODE_ENV === "development" &&
-    window.hasOwnProperty("__REDUX_DEVTOOLS_EXTENSION__")
-    ? window["__REDUX_DEVTOOLS_EXTENSION__"]()
-    : () => {}
-);
+  window.hasOwnProperty("__REDUX_DEVTOOLS_EXTENSION__")
+    ? createStore(rootReducer, window["__REDUX_DEVTOOLS_EXTENSION__"]())
+    : createStore(rootReducer);
 
 fetch("travelMap.yaml").then((res: Response) =>
   res.text().then(text => {
