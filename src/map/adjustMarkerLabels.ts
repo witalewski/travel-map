@@ -17,14 +17,7 @@ export const adjustMarkerLabels: (markers: MapglMarker[]) => void = markers => {
       }
     }
   });
-  console.log(
-    groups.map(group =>
-      group.map(
-        marker =>
-          `${marker._element.innerText} ${marker._pos.x},${marker._pos.y}`
-      )
-    )
-  );
+
   groups.forEach(group => {
     const xRange = group.reduce(
       (acc, marker) => [

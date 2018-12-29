@@ -2,7 +2,6 @@
 - name: "Goa"
   photos:
   - "goa-1.jpg"
-  - "goa-2.jpg"
   - "goa-3.jpg"
   - "goa-4.jpg"
 - name: "Hampi"
@@ -17,7 +16,6 @@
   photos:
   - "kumily-1.jpg"
   - "kumily-2.jpg"
-  - "kumily-3.jpg"
 - name: "Kochi"
   photos:
   - "kochi-1.jpg"
@@ -25,7 +23,6 @@
   - "kochi-3.jpg"
 - name: "Alleppey"
   photos:
-  - "alleppey-1.jpg"
   - "alleppey-2.jpg"
   - "alleppey-3.jpg"
 - name: "Mumbai"

@@ -1,11 +1,10 @@
-import { Action } from "./actions";
-import travelMap from "../../static/travelMap.yaml";
+import { TravelMapAction } from "./actions";
 
 const initialState: AppState = {
   previousState: null,
-  destinations: travelMap,
+  destinations: [],
   currentDestinationIndex: 0,
-  currentDestination: travelMap[0],
+  currentDestination: null,
   currentPhotoIndex: 0,
   currentPhoto: "",
   displayPhoto: false
@@ -48,11 +47,18 @@ const nextPhoto: (state: AppState) => AppState = state => ({
   previousState: state
 });
 
-export const rootReducer: (state: AppState, action: Action) => AppState = (
-  state = initialState,
-  action
-) => {
+export const rootReducer: (
+  state: AppState,
+  action: TravelMapAction
+) => AppState = (state = initialState, action) => {
   switch (action.type) {
+    case "RECEIVE_DESTINATIONS": {
+      return {
+        ...state,
+        destinations: action.destinations,
+        currentDestination: action.destinations[0]
+      };
+    }
     case "NEXT": {
       return isShowingLastPhotoInDestination(state)
         ? nextDestination(state)

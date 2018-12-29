@@ -8,6 +8,7 @@
     "@types/q": "^1.5.1",
     "@types/react": "^16.7.18",
     "@types/react-dom": "^16.0.11",
+    "axios": "^0.18.0",
     "js-yaml": "^3.12.0",
     "parcel": "^1.11.0",
     "react": "^16.7.0",
@@ -15,6 +16,10 @@
     "react-redux": "^6.0.0",
     "redux": "^4.0.1",
     "typescript": "^3.2.2"
+  },
+  "scripts": {
+    "start": "parcel public/index.html --open",
+    "build": "rm -rf dist && parcel build public/index.html"
   },
   "devDependencies": {
     "parcel-plugin-static-files-copy": "^1.2.4",
