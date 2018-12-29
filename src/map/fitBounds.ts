@@ -12,8 +12,20 @@ export const fitBounds: (
       isNaN(end) ? destinationsCoordinates.length : end
     )
   );
+
+  const paddingRatio = isNaN(start) ? 0.1 : 0.25;
+  const horizontalPadding = window.innerWidth * paddingRatio;
+  const verticalPadding = window.innerHeight * paddingRatio;
+
   map.fitBounds(
     [[bounds.sw.lng, bounds.sw.lat], [bounds.ne.lng, bounds.ne.lat]],
-    { maxZoom: 24, padding: { top: 200, bottom: 200, left: 400, right: 400 } }
+    {
+      padding: {
+        top: verticalPadding,
+        bottom: verticalPadding,
+        left: horizontalPadding,
+        right: horizontalPadding
+      }
+    }
   );
 };
