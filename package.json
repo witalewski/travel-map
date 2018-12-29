@@ -18,9 +18,12 @@
   },
   "scripts": {
     "start": "parcel public/index.html --open",
-    "build": "rm -rf dist && parcel build public/index.html"
+    "build": "rm -rf dist && parcel build public/index.html",
+    "predeploy": "build",
+    "deploy": "gh-pages -d build"
   },
   "devDependencies": {
+    "gh-pages": "^2.0.1",
     "parcel-plugin-static-files-copy": "^1.2.4",
     "sass": "^1.15.2"
   }
