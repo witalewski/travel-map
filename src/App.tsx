@@ -7,7 +7,8 @@ import {
   addAnimatedSegment,
   addRoute,
   addSolidSegments,
-  fitBounds
+  fitBounds,
+  adjustMarkerLabels
 } from "./map";
 import { next, prev } from "./state/actions";
 
@@ -42,13 +43,14 @@ export class App extends React.Component<
     this.map = renderMap("map");
     Promise.all(
       destinations.map(location => addMarker(location, this.map))
-    ).then(markers =>
+    ).then(markers => {
+      adjustMarkerLabels(markers);
       this.setState({
         destinationsCoordinates: markers.map(
           (marker: MapglMarker) => marker._lngLat
         )
-      })
-    );
+      });
+    });
   }
 
   componentDidMount() {

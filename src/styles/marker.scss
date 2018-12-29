@@ -10,10 +10,17 @@
   z-index: 2;
 
   .label {
-    transform: translate(50px, calc(20px - 50%));
+    width: 100px;
+
+    transform: translate(47px, 7px);
     font-size: 20px;
     font-weight: bold;
 
     z-index: 1;
+  }
+
+  &--left .label {
+    text-align: right;
+    transform: translate(-112px, 7px);
   }
 }

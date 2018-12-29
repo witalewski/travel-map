@@ -35,6 +35,11 @@ interface Bounds {
 
 interface MapglMarker {
   _lngLat: Coords;
+  _pos: {
+    x: number;
+    y: number;
+  };
+  _element:HTMLElement;
 }
 
 interface Geojson {
