@@ -12,20 +12,20 @@ export class Prev implements Action {
 
 export class ReceiveDestinations implements Action {
   readonly type = "RECEIVE_DESTINATIONS";
-  constructor(public destinations: Destination[]) {}
+  destinations: Destination[];
 }
 
-export const next: () => Action = () => ({
+export const next: () => Next = () => ({
   type: "NEXT"
 });
 
-export const prev: () => Action = () => ({
+export const prev: () => Prev = () => ({
   type: "PREV"
 });
 
 export const receiveDestinations: (
   destinations: Destination[]
-) => Action = destinations => ({
+) => ReceiveDestinations = destinations => ({
   type: "RECEIVE_DESTINATIONS",
   destinations
 });
