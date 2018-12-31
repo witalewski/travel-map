@@ -5,22 +5,22 @@ const initialState: AppState = {
   destinations: [],
   currentDestinationIndex: 0,
   currentDestination: null,
-  currentPhotoIndex: 0,
-  currentPhoto: "",
-  displayPhoto: false
+  currentMediaIndex: 0,
+  currentMedia: "",
+  displayMedia: false
 };
 
-const isShowingLastPhotoInDestination: (state: AppState) => boolean = state =>
-  !state.currentDestination.photos ||
-  state.currentPhotoIndex === state.currentDestination.photos.length;
+const isShowingLastMediaInDestination: (state: AppState) => boolean = state =>
+  !state.currentDestination.media ||
+  state.currentMediaIndex === state.currentDestination.media.length;
 
-const hidePhoto: (state: AppState) => AppState = state => {
-  if (!state.displayPhoto) {
+const hideMedia: (state: AppState) => AppState = state => {
+  if (!state.displayMedia) {
     return state;
   }
   return {
     ...state,
-    displayPhoto: false,
+    displayMedia: false,
     previousState: state
   };
 };
@@ -29,21 +29,21 @@ const nextDestination: (state: AppState) => AppState = state => {
   if (state.currentDestinationIndex < state.destinations.length - 1) {
     return {
       ...state,
-      currentPhotoIndex: 0,
-      displayPhoto: false,
+      currentMediaIndex: 0,
+      displayMedia: false,
       currentDestinationIndex: state.currentDestinationIndex + 1,
       currentDestination: state.destinations[state.currentDestinationIndex + 1],
       previousState: state
     };
   }
-  return hidePhoto(state);
+  return hideMedia(state);
 };
 
-const nextPhoto: (state: AppState) => AppState = state => ({
+const nextMedia: (state: AppState) => AppState = state => ({
   ...state,
-  currentPhotoIndex: state.currentPhotoIndex + 1,
-  displayPhoto: true,
-  currentPhoto: state.currentDestination.photos[state.currentPhotoIndex],
+  currentMediaIndex: state.currentMediaIndex + 1,
+  displayMedia: true,
+  currentMedia: state.currentDestination.media[state.currentMediaIndex],
   previousState: state
 });
 
@@ -60,9 +60,9 @@ export const rootReducer: (
       };
     }
     case "NEXT": {
-      return isShowingLastPhotoInDestination(state)
+      return isShowingLastMediaInDestination(state)
         ? nextDestination(state)
-        : nextPhoto(state);
+        : nextMedia(state);
     }
     case "PREV": {
       return state.previousState ? state.previousState : state;

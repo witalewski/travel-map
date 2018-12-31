@@ -1,10 +1,16 @@
 import { getAccessToken } from "./getAccessToken";
+import { isImage } from "../media/mediaType";
+import { mapElementsColor } from "../theme/theme";
 
 const getMarkerIcon = location => {
   const markerElement = document.createElement("div");
   markerElement.className = "marker";
-  if (location.photos) {
-    markerElement.style.backgroundImage = `url(${location.photos[0]})`;
+  markerElement.style.backgroundColor = mapElementsColor;
+  if (location.media) {
+    const image = location.media.find(isImage);
+    if (image) {
+      markerElement.style.backgroundImage = `url(${image})`;
+    }
   }
 
   const labelElement = document.createElement("div");
@@ -15,7 +21,10 @@ const getMarkerIcon = location => {
   return markerElement;
 };
 
-export const addMarker: (location:any, map:MapglMap) => Promise<MapglMarker> = (location, map) =>
+export const addMarker: (
+  location: any,
+  map: MapglMap
+) => Promise<MapglMarker> = (location, map) =>
   new Promise(resolve => {
     const mapboxClient = mapboxSdk({ accessToken: getAccessToken() });
     mapboxClient.geocoding

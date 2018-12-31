@@ -9,7 +9,7 @@ interface MapglMap {
 
 interface Destination {
   name: string;
-  photos?: string[];
+  media?: string[];
   coords?: Coords;
 }
 
@@ -18,9 +18,9 @@ interface AppState {
   destinations: Destination[];
   currentDestinationIndex: number;
   currentDestination: Destination;
-  currentPhotoIndex: number;
-  currentPhoto: string;
-  displayPhoto: boolean;
+  currentMediaIndex: number;
+  currentMedia: string;
+  displayMedia: boolean;
 }
 
 interface Coords {

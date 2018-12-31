@@ -1,3 +1,5 @@
+import { mapElementsColor } from "../theme/theme";
+
 export const createLineLayer: (
   id: string,
   geojson: Geojson,
@@ -14,7 +16,7 @@ export const createLineLayer: (
     "line-cap": "round"
   },
   paint: {
-    "line-color": "#cb4b16",
+    "line-color": mapElementsColor,
     "line-width": 8,
     "line-opacity": opacity
   }

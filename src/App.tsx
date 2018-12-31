@@ -10,14 +10,15 @@ import {
   fitBounds,
   adjustMarkerLabels
 } from "./map";
+import { isImage, isVideo } from "./media/mediaType.ts";
 import { next, prev } from "./state/actions";
 
 export class App extends React.Component<
   {
     destinations: Destination[];
     currentDestinationIndex: number;
-    currentPhoto: string;
-    displayPhoto: boolean;
+    currentMedia: string;
+    displayMedia: boolean;
     next: () => void;
     prev: () => void;
   },
@@ -107,7 +108,7 @@ export class App extends React.Component<
   }
 
   render() {
-    const { displayPhoto, currentPhoto } = this.props;
+    const { displayMedia, currentMedia } = this.props;
     return (
       <main
         className={`main ${
@@ -115,7 +116,14 @@ export class App extends React.Component<
         }`}
       >
         <div id="map" />
-        {displayPhoto && <img className="photo" src={currentPhoto} />}
+        {displayMedia && isImage(currentMedia) && (
+          <img className="photo" src={currentMedia} />
+        )}
+        {displayMedia && isVideo(currentMedia) && (
+          <video className="video" autoPlay controls>
+            <source src={currentMedia} />
+          </video>
+        )}
       </main>
     );
   }
@@ -124,8 +132,8 @@ export class App extends React.Component<
 const mapStateToProps = state => ({
   destinations: state.destinations,
   currentDestinationIndex: state.currentDestinationIndex,
-  currentPhoto: state.currentPhoto,
-  displayPhoto: state.displayPhoto
+  currentMedia: state.currentMedia,
+  displayMedia: state.displayMedia
 });
 const mapDispatchToProps = {
   next,
