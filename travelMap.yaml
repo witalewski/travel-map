@@ -1,29 +1,30 @@
 - name: "Mumbai"
 - name: "Goa"
-  photos:
+  media:
   - "goa-1.jpg"
   - "goa-3.jpg"
   - "goa-4.jpg"
 - name: "Hampi"
-  photos:
+  media:
   - "hampi-1.jpg"
   - "hampi-2.jpg"
 - name: "Bangalore"
-  photos:
+  media:
   - "bangalore-1.jpg"
   - "bangalore-2.jpg"
 - name: "Periyar"
-  photos:
+  media:
   - "kumily-1.jpg"
   - "kumily-2.jpg"
 - name: "Kochi"
-  photos:
+  media:
   - "kochi-1.jpg"
 - name: "Alleppey"
-  photos:
+  media:
+  - "alleppey-1.mov"
   - "alleppey-2.jpg"
   - "alleppey-3.jpg"
 - name: "Mumbai"
-  photos:
+  media:
   - "mumbai-1.jpg"
   - "mumbai-2.jpg"
