@@ -1,6 +1,8 @@
 @import "https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.css";
 @import "https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.0.0/mapbox-gl-directions.css";
+@import url("https://fonts.googleapis.com/css?family=Lato");
 @import "./main.scss";
+@import "./map.scss";
 @import "./marker.scss";
 
 *,
@@ -10,6 +12,7 @@
 }
 
 body {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
+  font-family: "Lato", sans-serif;
 }

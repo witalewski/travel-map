@@ -39,7 +39,7 @@ interface MapglMarker {
     x: number;
     y: number;
   };
-  _element:HTMLElement;
+  _element: HTMLElement;
 }
 
 interface Geojson {
