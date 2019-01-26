@@ -31,11 +31,13 @@ export class App extends React.Component<
 
   map: MapglMap;
 
-  onKeyUp = ({ code }) => {
-    if (code === "Space" || code === "ArrowRight") {
-      this.props.next();
-    } else if (code === "ArrowLeft") {
-      this.props.prev();
+  onKeyUp: (event: React.KeyboardEvent<HTMLElement>) => void = event => {
+    const { key } = event;
+    const { next, prev } = this.props;
+    if (key === "Space" || key === "ArrowRight") {
+      next();
+    } else if (key === "ArrowLeft") {
+      prev();
     }
   };
 
@@ -56,11 +58,6 @@ export class App extends React.Component<
 
   componentDidMount() {
     this.setupMap();
-    document.addEventListener("keyup", this.onKeyUp);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener("keyup", this.onKeyUp);
   }
 
   zoomToBounds(start?: number, end?: number) {
@@ -107,10 +104,18 @@ export class App extends React.Component<
     }
   }
 
+  onContextMenu = event => {
+    event.preventDefault();
+    this.props.prev();
+  };
+
   render() {
     const { displayMedia, currentMedia } = this.props;
     return (
       <main
+        onKeyUp={this.onKeyUp}
+        onClick={this.props.next}
+        onContextMenu={this.onContextMenu}
         className={`main ${
           this.state.displayMarkers ? "" : "main--hide-markers"
         }`}
