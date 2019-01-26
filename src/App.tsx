@@ -10,8 +10,8 @@ import {
   fitBounds,
   adjustMarkerLabels
 } from "./map";
-import { isImage, isVideo } from "./media/mediaType.ts";
 import { next, prev } from "./state/actions";
+import { MediaContent } from "./components/MediaContent";
 
 export class App extends React.Component<
   {
@@ -121,14 +121,7 @@ export class App extends React.Component<
         }`}
       >
         <div id="map" />
-        {displayMedia && isImage(currentMedia) && (
-          <img className="photo" src={currentMedia} />
-        )}
-        {displayMedia && isVideo(currentMedia) && (
-          <video className="video" autoPlay controls>
-            <source src={currentMedia} />
-          </video>
-        )}
+        {displayMedia && <MediaContent media={currentMedia} />}
       </main>
     );
   }
