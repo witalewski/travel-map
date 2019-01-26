@@ -68,3 +68,5 @@ interface MapLayer {
     "line-opacity": number;
   };
 }
+
+type isMediaType = (filename: string) => boolean;
