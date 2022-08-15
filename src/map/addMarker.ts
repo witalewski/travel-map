@@ -2,7 +2,7 @@ import { getAccessToken } from "./getAccessToken";
 import { isImage } from "../media/mediaType";
 import { mapElementsColor } from "../theme/theme";
 
-const getMarkerIcon = location => {
+const getMarkerIcon = (location) => {
   const markerElement = document.createElement("div");
   markerElement.className = "marker";
   markerElement.style.backgroundColor = mapElementsColor;
@@ -24,28 +24,32 @@ const getMarkerIcon = location => {
 export const addMarker: (
   location: any,
   map: MapglMap
-) => Promise<MapglMarker> = (location, map) =>
-  new Promise(resolve => {
-    const mapboxClient = mapboxSdk({ accessToken: getAccessToken() });
-    mapboxClient.geocoding
+) => Promise<MapglMarker> = async (location, map) => {
+  const mapboxClient = mapboxSdk({ accessToken: getAccessToken() });
+  let lngLat = location.coords;
+  if (!lngLat) {
+    const response = await mapboxClient.geocoding
       .forwardGeocode({
         query: location.name,
         autocomplete: false,
-        limit: 1
+        limit: 1,
       })
-      .send()
-      .then(function(response) {
-        if (
-          response &&
-          response.body &&
-          response.body.features &&
-          response.body.features.length
-        ) {
-          var feature = response.body.features[0];
-          const marker = new mapboxgl.Marker(getMarkerIcon(location))
-            .setLngLat(feature.center)
-            .addTo(map);
-          resolve(marker);
-        }
-      });
-  });
+      .send();
+    if (
+      response &&
+      response.body &&
+      response.body.features &&
+      response.body.features.length
+    ) {
+      var feature = response.body.features[0];
+      lngLat = feature.center;
+    }
+  }
+  if (!lngLat) {
+    throw new Error(`Could not find location for ${location.name}`);
+  }
+  const marker = new mapboxgl.Marker(getMarkerIcon(location))
+    .setLngLat(lngLat)
+    .addTo(map);
+  return marker;
+};
