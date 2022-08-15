@@ -11,7 +11,7 @@
     "@types/react-dom": "^16.0.11",
     "axios": "^0.21.2",
     "js-yaml": "^3.12.0",
-    "parcel": "^1.11.0",
+    "parcel": "^2.7.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-redux": "^6.0.0",
@@ -21,12 +21,12 @@
   "scripts": {
     "start": "parcel public/index.html --open",
     "build": "rm -rf dist && parcel build public/index.html --public-url /travel-map",
-    "predeploy": "yarn build",
+    "predeploy": "build",
     "deploy": "gh-pages -d dist"
   },
   "devDependencies": {
     "gh-pages": "^2.0.1",
-    "parcel-plugin-static-files-copy": "^1.2.4",
+    "parcel-plugin-static-files-copy": "^2.6.0",
     "sass": "^1.15.2"
   }
 }
