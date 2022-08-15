@@ -1,7 +1,7 @@
 import * as React from "react";
 import { connect } from "react-redux";
 
-import { next, prev } from "./state/actions";
+import { showNextSlide, showPreviousSlide } from "./state/actions";
 import { MediaContent } from "./components/MediaContent";
 import { MapContent } from "./components/MapContent";
 
@@ -10,8 +10,8 @@ interface AppParams {
   currentDestinationIndex: number;
   currentMedia: string;
   displayMedia: boolean;
-  next: () => void;
-  prev: () => void;
+  showNextSlide: () => void;
+  showPreviousSlide: () => void;
 }
 
 export const App = ({
@@ -19,28 +19,35 @@ export const App = ({
   currentDestinationIndex,
   currentMedia,
   displayMedia,
-  next,
-  prev
-}) => {
-  const onKeyUp: (event: React.KeyboardEvent<HTMLElement>) => void = event => {
+  showNextSlide,
+  showPreviousSlide,
+}: AppParams) => {
+  const onKeyUp: (event: React.KeyboardEvent<HTMLElement>) => void = (
+    event
+  ) => {
     const { key } = event;
-    if (key === "Space" || key === "ArrowRight") {
-      next();
-    } else if (key === "ArrowLeft") {
-      prev();
+    switch (key) {
+      case " ":
+      case "Space":
+      case "ArrowRight":
+        showNextSlide();
+        break;
+      case "ArrowLeft":
+        showPreviousSlide();
+        break;
     }
   };
 
-  const onContextMenu = event => {
+  const onRightClick = (event) => {
     event.preventDefault();
-    prev();
+    showPreviousSlide();
   };
 
   return (
     <main
       onKeyUp={onKeyUp}
-      onClick={next}
-      onContextMenu={onContextMenu}
+      onClick={showNextSlide}
+      onContextMenu={onRightClick}
       className="main"
     >
       <MapContent
@@ -52,18 +59,15 @@ export const App = ({
   );
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   destinations: state.destinations,
   currentDestinationIndex: state.currentDestinationIndex,
   currentMedia: state.currentMedia,
-  displayMedia: state.displayMedia
+  displayMedia: state.displayMedia,
 });
 const mapDispatchToProps = {
-  next,
-  prev
+  showNextSlide: showNextSlide,
+  showPreviousSlide: showPreviousSlide,
 };
 
-export const AppConnected = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(App);
+export const AppConnected = connect(mapStateToProps, mapDispatchToProps)(App);

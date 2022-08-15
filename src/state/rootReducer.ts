@@ -52,19 +52,19 @@ export const rootReducer: (
   action: TravelMapAction
 ) => AppState = (state = initialState, action) => {
   switch (action.type) {
-    case "RECEIVE_DESTINATIONS": {
+    case "RECEIVE_DESTINATIONS_ACTION": {
       return {
         ...state,
         destinations: action.destinations,
         currentDestination: action.destinations[0]
       };
     }
-    case "NEXT": {
+    case "SHOW_NEXT_SLIDE_ACTION": {
       return isShowingLastMediaInDestination(state)
         ? nextDestination(state)
         : nextMedia(state);
     }
-    case "PREV": {
+    case "SHOW_PREVIOUS_SLIDE_ACTION": {
       return state.previousState ? state.previousState : state;
     }
     default:

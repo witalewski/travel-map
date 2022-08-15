@@ -2,32 +2,32 @@ interface Action {
   type: string;
 }
 
-export class Next implements Action {
-  readonly type = "NEXT";
+export class ShowNextSlideAction implements Action {
+  readonly type = "SHOW_NEXT_SLIDE_ACTION";
 }
 
-export class Prev implements Action {
-  readonly type = "PREV";
+export class ShowPreviousSlideAction implements Action {
+  readonly type = "SHOW_PREVIOUS_SLIDE_ACTION";
 }
 
 export class ReceiveDestinations implements Action {
-  readonly type = "RECEIVE_DESTINATIONS";
+  readonly type = "RECEIVE_DESTINATIONS_ACTION";
   destinations: Destination[];
 }
 
-export const next: () => Next = () => ({
-  type: "NEXT"
+export const showNextSlide: () => ShowNextSlideAction = () => ({
+  type: "SHOW_NEXT_SLIDE_ACTION"
 });
 
-export const prev: () => Prev = () => ({
-  type: "PREV"
+export const showPreviousSlide: () => ShowPreviousSlideAction = () => ({
+  type: "SHOW_PREVIOUS_SLIDE_ACTION"
 });
 
 export const receiveDestinations: (
   destinations: Destination[]
 ) => ReceiveDestinations = destinations => ({
-  type: "RECEIVE_DESTINATIONS",
+  type: "RECEIVE_DESTINATIONS_ACTION",
   destinations
 });
 
-export type TravelMapAction = ReceiveDestinations | Next | Prev;
+export type TravelMapAction = ReceiveDestinations | ShowNextSlideAction | ShowPreviousSlideAction;

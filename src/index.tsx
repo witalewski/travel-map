@@ -1,6 +1,5 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import * as axios from "axios";
 import * as yaml from "js-yaml";
 import { createStore } from "redux";
 import { Provider } from "react-redux";
