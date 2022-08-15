@@ -71,16 +71,18 @@ export const useMapContent = (
   }, []);
 
   useEffect(() => {
-    if (currentDestinationIndex === 0 && destinationsCoordinates) {
+    if (!destinationsCoordinates.length) {
+      return;
+    }
+
+    if (currentDestinationIndex === 0) {
       zoomToBounds();
       showInitialView();
     } else if (currentDestinationIndex) {
       updateDestination(
         currentDestinationIndex < previousDestinationIndex.current
       );
-      if (currentDestinationIndex !== previousDestinationIndex.current) {
-        previousDestinationIndex.current = currentDestinationIndex;
-      }
+      previousDestinationIndex.current = currentDestinationIndex;
     }
   }, [currentDestinationIndex, destinationsCoordinates]);
 
