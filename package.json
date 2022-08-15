@@ -21,7 +21,7 @@
   "scripts": {
     "start": "parcel public/index.html --open",
     "build": "rm -rf dist && parcel build public/index.html --public-url /travel-map",
-    "predeploy": "build",
+    "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },
   "devDependencies": {
