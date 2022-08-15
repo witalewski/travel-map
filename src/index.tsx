@@ -8,6 +8,7 @@ import "./styles/index.scss";
 import { AppConnected } from "./App";
 import { rootReducer } from "./state/rootReducer";
 import { receiveDestinations } from "./state/actions";
+import destinations from "../static/travelMap.yaml";
 
 const store =
   process.env.NODE_ENV === "development" &&
@@ -16,8 +17,8 @@ const store =
     : createStore(rootReducer);
 
 fetch("travelMap.yaml").then((res: Response) =>
-  res.text().then(text => {
-    store.dispatch(receiveDestinations(yaml.safeLoad(text)));
+  res.text().then((text) => {
+    store.dispatch(receiveDestinations(yaml.safeLoad(text) as unknown as Destination[]));
     ReactDOM.render(
       <Provider store={store}>
         <AppConnected />

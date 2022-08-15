@@ -19,14 +19,18 @@
     "typescript": "^3.2.2"
   },
   "scripts": {
-    "start": "parcel public/index.html --open",
+    "start": "parcel serve public/index.html --open",
     "build": "rm -rf dist && parcel build public/index.html --public-url /travel-map",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },
   "devDependencies": {
+    "@parcel/transformer-sass": "^2.7.0",
+    "@parcel/transformer-yaml": "^2.7.0",
+    "@types/node": "^18.7.4",
     "gh-pages": "^2.0.1",
-    "parcel-plugin-static-files-copy": "^2.6.0",
+    "parcel-reporter-static-files-copy": "^1.4.0",
+    "process": "^0.11.10",
     "sass": "^1.15.2"
   }
 }
