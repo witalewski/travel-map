@@ -8,7 +8,6 @@ import "./styles/index.scss";
 import { AppConnected } from "./App";
 import { rootReducer } from "./state/rootReducer";
 import { receiveDestinations } from "./state/actions";
-import destinations from "../static/travelMap.yaml";
 
 const store =
   process.env.NODE_ENV === "development" &&
