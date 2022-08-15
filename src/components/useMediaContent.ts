@@ -7,7 +7,7 @@ export const useMediaContent = () => {
     return () => {
       recentVideo?.pause();
     };
-  });
+  }, [videoEl.current]);
   return {
     videoEl,
   };
