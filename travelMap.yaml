@@ -1,29 +1,50 @@
 - name: "Mumbai"
+  coords:
+    lat: 19.077655397175317
+    lng: 72.85577044435216
 - name: "Goa"
+  coords:
+    lat: 15.573682953411586
+    lng: 73.74083222860965
   media:
-  - "goa-1.jpg"
-  - "goa-3.jpg"
-  - "goa-4.jpg"
+    - "goa-1.jpg"
+    - "goa-3.jpg"
+    - "goa-4.jpg"
 - name: "Hampi"
+  coords:
+    lat: 15.334534904799098
+    lng: 76.46136058430874
   media:
-  - "hampi-1.jpg"
-  - "hampi-2.jpg"
+    - "hampi-1.jpg"
+    - "hampi-2.jpg"
 - name: "Bangalore"
+  coords:
+    lat: 13.002016002311194
+    lng: 77.58072915138814
   media:
-  - "bangalore-1.jpg"
+    - "bangalore-1.jpg"
 - name: "Periyar"
+  coords:
+    lat: 9.604361628928867
+    lng: 77.16666776518538
   media:
-  - "kumily-1.jpg"
-  - "kumily-2.jpg"
+    - "kumily-1.jpg"
+    - "kumily-2.jpg"
 - name: "Kochi"
+  coords:
+    lat: 9.96584208522898
+    lng: 76.24214362438737
   media:
-  - "kochi-1.jpg"
+    - "kochi-1.jpg"
 - name: "Alleppey"
   media:
-  - "alleppey-1.mov"
-  - "alleppey-2.jpg"
-  - "alleppey-3.jpg"
+    - "alleppey-1.mov"
+    - "alleppey-2.jpg"
+    - "alleppey-3.jpg"
 - name: "Mumbai"
+  coords:
+    lat: 19.077655397175317
+    lng: 72.85577044435216
   media:
-  - "mumbai-1.jpg"
-  - "mumbai-2.jpg"
+    - "mumbai-1.jpg"
+    - "mumbai-2.jpg"
